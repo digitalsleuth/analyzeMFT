@@ -2,11 +2,11 @@ from distutils.core import setup
 
 setup(
     name='analyzeMFT',
-    version='2.0.19',
-    author='David Kovar',
-    author_email='dkovar@gmail.com',
+    version='3.0.0',
+    author='Corey Forman',
+    author_email='corey@digitalsleuth.ca',
     packages=['analyzemft'],
-    url='http://github.com/dkovar/analyzeMFT',
+    url='http://github.com/digitalsleuth/analyzeMFT',
     license='LICENSE.txt',
     description='Analyze the $MFT from a NTFS filesystem.',
     long_description=open('README.txt').read(),

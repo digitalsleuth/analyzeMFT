@@ -2,13 +2,14 @@ from datetime import datetime
 
 
 # DevelNote: need to pass in localtz now
+# little_endian parsers by Willi Ballenthin
 
 class WindowsTime:
     """Convert the Windows time in 100 nanosecond intervals since Jan 1, 1601 to time in seconds since Jan 1, 1970"""
 
     def __init__(self, low, high, localtz):
-        self.low = long(low)
-        self.high = long(high)
+        self.low = int(low)
+        self.high = int(high)
 
         if (low == 0) and (high == 0):
             self.dt = 0
@@ -49,9 +50,36 @@ def hexdump(chars, sep, width):
         line = chars[:width]
         chars = chars[width:]
         line = line.ljust(width, '\000')
-        print "%s%s%s" % (sep.join("%02x" % ord(c) for c in line),
-                          sep, quotechars(line))
+        print("%s%s%s" % (sep.join("%02x" % ord(c) for c in line),
+                          sep, quotechars(line)))
 
 
 def quotechars(chars):
     return ''.join(['.', c][c.isalnum()] for c in chars)
+
+
+def parse_little_endian_signed_positive(buf):
+    ret = 0
+    for i, b in enumerate(buf):
+        ret += b * (1 << (i * 8))
+    return ret
+
+
+def parse_little_endian_signed_negative(buf):
+    ret = 0
+    for i, b in enumerate(buf):
+        ret += (b ^ 0xFF) * (1 << (i * 8))
+    ret += 1
+
+    ret *= -1
+    return ret
+
+
+def parse_little_endian_signed(buf):
+    try:
+        if not buf[-1] & 0b10000000:
+            return parse_little_endian_signed_positive(buf)
+        else:
+            return parse_little_endian_signed_negative(buf)
+    except Exception:
+        return ''
