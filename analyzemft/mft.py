@@ -13,7 +13,6 @@ import binascii
 import json
 import ctypes
 import struct
-from optparse import OptionParser
 
 from . import mftutils
 
@@ -70,7 +69,7 @@ def parse_record(raw_record, options):
 
         if atr_record['type'] == 0x10:  # Standard Information
             if options.debug:
-                print(f"Stardard Information:\n++Type: {hex(int(atr_record['type']))} Length: {atr_record['len']} Resident: {atr_record['res']} Name Len: {atr_record['nlen']} Name Offset: {atr_record['name_off']}")
+                print(f"Standard Information:\n++Type: {hex(int(atr_record['type']))} Length: {atr_record['len']} Resident: {atr_record['res']} Name Len: {atr_record['nlen']} Name Offset: {atr_record['name_off']}")
             si_record = decode_si_attribute(raw_record[read_ptr + atr_record['soff']:], options.localtz)
             record['si'] = si_record
             if options.debug:
@@ -194,7 +193,9 @@ def parse_record(raw_record, options):
 
     if options.anomaly:
         anomaly_detect(record)
-
+    #if record['recordnum'] == 263888:
+        #print(record)
+        #print("Pause at 263888")
     return record
 
 
@@ -371,7 +372,7 @@ def mft_to_json(record):
     if 'si' in record:
         json_object['filename'] = str(record['filename'])
         json_object['recordnumber'] = str(record['recordnum'])
-        json_object['recordtype'] = str(record['recordtype'])
+        #json_object['recordtype'] = str(record['recordtype'])
     else:
         json_object['filename'] = "nFn"
         json_object['recordnumber'] = str(record['recordnum'])

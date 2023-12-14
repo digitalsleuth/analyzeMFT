@@ -9,6 +9,6 @@ setup(
     url='http://github.com/digitalsleuth/analyzeMFT',
     license='LICENSE.txt',
     description='Analyze the $MFT from a NTFS filesystem.',
-    long_description=open('README.txt').read(),
+    long_description=open('README.md').read(),
     scripts=['analyzeMFT.py']
 )
